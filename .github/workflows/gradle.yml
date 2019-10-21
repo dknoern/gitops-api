@@ -14,6 +14,15 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      #run: ./gradlew build
       run: ./gradlew jibDockerBuild
+    - name: Login to ECR
+      id: ecr
+      uses: jwalton/gh-ecr-login@v1
+      with:
+        access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        region: us-west-2
+    - name: Push to ECR
+      run: |
+        docker push 484951121041.dkr.ecr.us-west-2.amazonaws.com/gitops-api:latest
 
