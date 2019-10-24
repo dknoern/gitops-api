@@ -25,4 +25,10 @@ jobs:
     - name: Push to ECR
       run: |
         docker push 484951121041.dkr.ecr.us-west-2.amazonaws.com/gitops-api:latest
-
+    - name: update environment
+      uses: actions/aws/cli@master
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      with:
+        args:  ecs update-service --region us-west-2 --cluster gitops6 --service backend --force-new-deployment
